@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citato Birthday Countdown</title>
+
+<!-- Memuat Tailwind CSS untuk layout responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Memuat Font Google untuk gaya Piksel khas Minecraft -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Pengaturan Font Utama */
+        .font-pixel {
+            font-family: 'Press Start 2P', cursive;
+        }
+        .font-mc-text {
+            font-family: 'VT323', monospace;
+        }
+
+        /* Latar Belakang (Tema Malam/Batu Bata Gelap) */
+    body {
+        background-color: #5c7b39; /* Tema Poisonous Potato */
+        background-image: 
+            linear-gradient(45deg, #3d5622 25%, transparent 25%, transparent 75%, #3d5622 75%, #3d5622),
+            linear-gradient(45deg, #3d5622 25%, transparent 25%, transparent 75%, #3d5622 75%, #3d5622);
+        background-size: 64px 64px;
+        background-position: 0 0, 32px 32px;
+        color: #ffffff;
+        image-rendering: pixelated;
+    }
+
+    /* Gaya UI Klasik Minecraft (Bevel abu-abu) */
+        .mc-gui {
+            background-color: #c6c6c6;
+            border: 4px solid;
+            border-top-color: #ffffff;
+            border-left-color: #ffffff;
+            border-bottom-color: #555555;
+            border-right-color: #555555;
+            color: #333333;
+        }
+
+        /* Teks Judul dengan Efek Bayangan (Teks Kuning Minecraft) */
+    .mc-title {
+        color: #ffff55; /* Warna kuning standar MC */
+        text-shadow: 4px 4px 0px #2c3b17;
+        line-height: 1.5;
+    }
+
+    /* Teks Putih dengan bayangan hitam */
+        .mc-text-shadow {
+            text-shadow: 2px 2px 0px #000000;
+        }
+
+        /* Tombol ala Minecraft */
+        .mc-button {
+            background-color: #727272;
+            border: 4px solid;
+            border-top-color: #9f9f9f;
+            border-left-color: #9f9f9f;
+            border-bottom-color: #3f3f3f;
+            border-right-color: #3f3f3f;
+            color: white;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .mc-button:active {
+            border-top-color: #3f3f3f;
+            border-left-color: #3f3f3f;
+            border-bottom-color: #9f9f9f;
+            border-right-color: #9f9f9f;
+            transform: scale(0.98);
+        }
+        
+        .mc-button:hover {
+            background-color: #828282;
+            color: #ffffaa;
+        }
+
+        /* Efek Dirt Block (Balok Tanah) untuk footer/aksen */
+        .mc-dirt {
+            background-color: #866043;
+            border-top: 16px solid #479030; /* Grass top */
+            border-bottom: 4px solid #523824;
+        }
+        
+        /* Hilangkan lengkungan bawaan tailwind agar kaku (blocky) */
+        * {
+            border-radius: 0 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-x-hidden">
+
+    <!-- Efek Bintang/Partikel Latar -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-20" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+    <main class="z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
+        
+        <!-- Header -->
+        <header class="text-center mb-10 w-full">
+            <h2 class="font-pixel text-white mc-text-shadow text-sm md:text-lg mb-4 tracking-widest">PERSIAPKAN DIRIMU UNTUK</h2>
+            <h1 class="font-pixel mc-title text-2xl md:text-4xl lg:text-5xl uppercase text-center break-words w-full px-2">
+                Citato<br><span class="text-white mt-4 block text-xl md:text-3xl text-shadow-none" style="text-shadow: 4px 4px 0px #2c3b17;">Birthday</span>
+            </h1>
+        </header>
+
+        <!-- Kotak Utama Hitung Mundur (GUI Style) -->
+        <div class="mc-gui p-4 md:p-8 w-full shadow-2xl mb-12">
+            <div class="text-center mb-6">
+                <p class="font-pixel text-gray-800 text-xs md:text-sm">GRAND OPENING DALAM:</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center" id="countdown-container">
+                <!-- Hari -->
+                <div class="bg-gray-800 p-4 border-2 border-black flex flex-col items-center justify-center">
+                    <span id="days" class="font-mc-text text-5xl md:text-7xl text-green-400 mc-text-shadow">00</span>
+                    <span class="font-pixel text-white text-[10px] md:text-xs mt-2">HARI</span>
+                </div>
+                
+                <!-- Jam -->
+                <div class="bg-gray-800 p-4 border-2 border-black flex flex-col items-center justify-center">
+                    <span id="hours" class="font-mc-text text-5xl md:text-7xl text-green-400 mc-text-shadow">00</span>
+                    <span class="font-pixel text-white text-[10px] md:text-xs mt-2">JAM</span>
+                </div>
+                
+                <!-- Menit -->
+                <div class="bg-gray-800 p-4 border-2 border-black flex flex-col items-center justify-center">
+                    <span id="minutes" class="font-mc-text text-5xl md:text-7xl text-green-400 mc-text-shadow">00</span>
+                    <span class="font-pixel text-white text-[10px] md:text-xs mt-2">MENIT</span>
+                </div>
+                
+                <!-- Detik -->
+                <div class="bg-gray-800 p-4 border-2 border-black flex flex-col items-center justify-center">
+                    <span id="seconds" class="font-mc-text text-5xl md:text-7xl text-green-400 mc-text-shadow">00</span>
+                    <span class="font-pixel text-white text-[10px] md:text-xs mt-2">DETIK</span>
+                </div>
+            </div>
+
+            <!-- Pesan jika waktu habis -->
+        <div id="expired-message" class="hidden text-center mt-6 p-4 bg-green-900 border-2 border-black">
+            <h3 class="font-pixel text-yellow-300 text-lg md:text-xl mc-text-shadow animate-pulse">SELAMAT ULANG TAHUN CITATO! 🥔</h3>
+        </div>
+    </div>
+
+    <!-- Background Bawah (Efek Tanah) -->
+    <div class="mc-dirt w-full h-24 absolute bottom-0 left-0 z-0"></div>
+    <div class="z-10 text-center pb-4 mt-auto w-full relative">
+        <p class="font-mc-text text-white text-xl mc-text-shadow">Tema Poisonous Potato 🥔</p>
+    </div>
+
+    <script>
+        // --- PENGATURAN TARGET WAKTU ---
+        // Atur waktu tujuan ke 6 Juli 2026
+        const targetDate = new Date("Jul 06, 2026 00:00:00").getTime(); 
+        
+        // Element DOM
+        const elDays = document.getElementById("days");
+        const elHours = document.getElementById("hours");
+        const elMinutes = document.getElementById("minutes");
+        const elSeconds = document.getElementById("seconds");
+        const container = document.getElementById("countdown-container");
+        const expiredMessage = document.getElementById("expired-message");
+
+        // Fungsi memperbarui hitungan
+        const updateCountdown = setInterval(function() {
+            // Dapatkan waktu hari ini
+            const currentDate = new Date().getTime();
+            
+            // Temukan jarak antara sekarang dan target
+            const distance = targetDate - currentDate;
+            
+            // Perhitungan waktu untuk hari, jam, menit, dan detik
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Format agar selalu dua digit (01, 02, dst)
+            elDays.innerHTML = days < 10 ? "0" + days : days;
+            elHours.innerHTML = hours < 10 ? "0" + hours : hours;
+            elMinutes.innerHTML = minutes < 10 ? "0" + minutes : minutes;
+            elSeconds.innerHTML = seconds < 10 ? "0" + seconds : seconds;
+            
+            // Jika hitung mundur selesai
+        if (distance < 0) {
+            clearInterval(updateCountdown);
+            container.classList.add("hidden"); // Sembunyikan angka
+            expiredMessage.classList.remove("hidden"); // Munculkan pesan sukses
+        }
+    }, 1000);
+</script>
+</body>
+</html>
